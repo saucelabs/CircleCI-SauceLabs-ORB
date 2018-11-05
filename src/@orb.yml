@@ -1,5 +1,5 @@
 version: 2.1
-description: "Encapsulates interactions with SauceLabs Connect"
+description: "Encapsulates interactions with Sauce Connect Proxy"
 
 commands:
   install:
@@ -9,7 +9,7 @@ commands:
         default: "4.5.1"
     steps:
       - run:
-          name: Install SauceLabs Connect
+          name: Install Sauce Connect Proxy
           command: |
             cd /tmp
             curl https://saucelabs.com/downloads/sc-<<parameters.version>>-linux.tar.gz -o saucelabs.tar.gz
@@ -25,7 +25,7 @@ commands:
         default: ""
     steps:
       - run:
-          name: Open Sauce Connect Tunnel
+          name: Open Sauce Connect Proxy Tunnel
           command: |
             : ${SAUCELABS_USER:?"Required Env Variable not found!"}
             : ${SAUCELABS_KEY:?"Required Env Variable not found!"}
