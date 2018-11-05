@@ -89,19 +89,6 @@ jobs:
       - steps: << parameters.steps >>
       - close_tunnel
 
-examples:
-  simple_test:
-    description: Open a named saucelabs tunnel before running mvn verify
-    usage:
-      version: 2.1
-      orbs:
-        saucelabs: saucelabs/connect@volatile
-      workflows:
-        basic_workflow:
-          jobs:
-            - saucelabs/with_proxy:
-                steps:
-                  - run: mvn verify -B
   parrallel_tunnels:
     description: Open a named saucelabs tunnel before running mvn verify
     usage:
