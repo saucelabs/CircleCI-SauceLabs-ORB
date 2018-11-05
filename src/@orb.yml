@@ -1,6 +1,7 @@
 version: 2.1
-description: "Encapsulates interactions with Sauce Connect Proxy"
-
+description: >
+  Encapsulates interactions with Sauce Connect Proxy
+  The source repo for this ORB can be found here: https://github.com/saucelabs-sample-test-frameworks/CircleCI-SauceLabs-ORB
 commands:
   install:
     parameters:
