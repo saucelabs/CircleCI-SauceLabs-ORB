@@ -7,6 +7,7 @@ commands:
   install:
     parameters:
       version:
+        description: You can specify which version of Sauce Connect Proxy to use.
         type: string
         default: "4.5.1"
     steps:
@@ -23,6 +24,7 @@ commands:
   open_tunnel:
     parameters:
       tunnel_identifier:
+        description: This desired capability will let the test job use any shared tunnels available from the specified parent account. i.e. any account that is upstream in the hierarchy. If using a shared tunnel, you must specify both tunnelIdentifier and parentTunnel.
         type: string
         default: ""
     steps:
@@ -44,11 +46,13 @@ commands:
 
 jobs:
   with_proxy:
+    description: Use Sauce Connect with a Proxy
     parameters:
       docker:
         type: string
         default: "circleci/openjdk:8"
       tunnel_identifier:
+        description: Name your Sauce Connect tunnel make sure to use the tunnelIdentifier desired capability in your test script
         type: string
         default: ""
       version:
