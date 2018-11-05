@@ -1,0 +1,104 @@
+version: 2.1
+description: "Encapsulates interactions with SauceLabs Connect"
+
+commands:
+  install:
+    parameters:
+      version:
+        type: string
+        default: "4.5.1"
+    steps:
+      - run:
+          name: Install SauceLabs Connect
+          command: |
+            cd /tmp
+            curl https://saucelabs.com/downloads/sc-<<parameters.version>>-linux.tar.gz -o saucelabs.tar.gz
+            tar -xzf saucelabs.tar.gz
+            chmod a+x sc-<<parameters.version>>-linux/bin/sc
+            sudo cp sc-<<parameters.version>>-linux/bin/sc /usr/local/bin
+            sc --version
+
+  open_tunnel:
+    parameters:
+      tunnel_identifier:
+        type: string
+        default: ""
+    steps:
+      - run:
+          name: Open Sauce Connect Tunnel
+          command: |
+            : ${SAUCELABS_USER:?"Required Env Variable not found!"}
+            : ${SAUCELABS_KEY:?"Required Env Variable not found!"}
+            # startup saucelabs tunnel as background task (its a blocking command)
+            sc -u ${SAUCELABS_USER} -k ${SAUCELABS_KEY} <<# parameters.tunnel_identifier >> -i <<parameters.tunnel_identifier>> <</ parameters.tunnel_identifier>> &
+            #wait for sauce tunnel up to 1 minute
+            wget --retry-connrefused --no-check-certificate -T 60 localhost:4445
+
+  close_tunnel:
+    steps:
+      - run:
+          name: Close Sauce Connect Tunnels
+          command: killall sc 
+
+jobs:
+  with_proxy:
+    parameters:
+      docker:
+        type: string
+        default: "circleci/openjdk:8"
+      tunnel_identifier:
+        type: string
+        default: ""
+      version:
+        type: string
+        default: "4.5.1"
+      steps:
+        type: steps
+        description: Steps to execute once the Sauce Connect Tunnel is available
+    docker: 
+      - image: <<parameters.docker>>
+    steps:
+      - checkout
+      - install:
+          version: <<parameters.version>>
+      - open_tunnel:
+          tunnel_identifier: <<parameters.tunnel_identifier>>
+      - steps: << parameters.steps >>
+      - close_tunnel
+
+examples:
+  simple_test:
+    description: Open a named saucelabs tunnel before running mvn verify
+    usage:
+      version: 2.1
+      orbs:
+        saucelabs: saucelabs/connect@volatile
+      workflows:
+        basic_workflow:
+          jobs:
+            - saucelabs/with_proxy:
+                steps:
+                  - run: mvn verify -B
+  parrallel_tunnels:
+    description: Open a named saucelabs tunnel before running mvn verify
+    usage:
+      version: 2.1
+      orbs:
+        saucelabs: saucelabs/connect@volatile
+      workflows:
+        browser_tests:
+          jobs:
+            - saucelabs/with_proxy:
+                name: "Chrome Tests"
+                steps:
+                  - run: mvn verify -B -Dsauce.browser=chrome  -Dsauce.tunnel="chrome"
+                tunnel_identifier: "chrome"
+            - saucelabs/with_proxy:
+                name: "Safari Tests"
+                steps:
+                  - run: mvn verify -B -Dsauce.browser=safari  -Dsauce.tunnel="safari"
+                tunnel_identifier: "safari"
+
+
+
+

@@ -1,0 +1,7 @@
+workflows:
+  basic_workflow:
+    jobs:
+      - saucelabs/with_proxy:
+          tunnel_identifier: "chrome"
+          steps:
+            - run: mvn verify -B

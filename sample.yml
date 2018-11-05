@@ -1,0 +1,12 @@
+version: 2.1
+orbs:
+  # TODO: change to saucelabs: saucelabs/connects@volatile once transitioned
+  saucelabs: sandbox/saucelabs@volatile
+workflows:
+  basic_workflow:
+    jobs:
+      - saucelabs/with_proxy:
+          name: "build"
+          tunnel_identifier: "chrome"
+          steps:
+            - run: echo "I'm running tests against localhost:4445"
