@@ -2,6 +2,28 @@ version: 2.1
 description: >
   Encapsulates interactions with Sauce Connect Proxy
   The source repo for this ORB can be found here: https://github.com/saucelabs-sample-test-frameworks/CircleCI-SauceLabs-ORB
+  
+examples:
+  simple_start_sauce_connect:
+    description: Manage Sauce Connect Proxy
+    usage:
+      version: 2.1
+      orbs:
+        saucelabs: saucelabs/connects@volatile
+      workflows:
+        browser_tests:
+          jobs:
+            - saucelabs/with_proxy:
+                name: "Chrome Tests"
+                steps:
+                  - run: mvn verify -B -Dsauce.browser=chrome  -Dsauce.tunnel="chrome"
+                tunnel_identifier: "chrome"
+            - saucelabs/with_proxy:
+                name: "Safari Tests"
+                steps:
+                  - run: mvn verify -B -Dsauce.browser=safari  -Dsauce.tunnel="safari"
+                tunnel_identifier: "safari"
+
 commands:
   install:
     parameters:
