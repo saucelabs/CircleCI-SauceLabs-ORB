@@ -11,7 +11,7 @@ See [https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy](https://wiki.s
 ## Sample Config
 An example config running selenium tests for multiple browsers in parallel with Maven
 
-```
+```yaml
 version: 2.1
 orbs:
   saucelabs: saucelabs/connects@volatile
