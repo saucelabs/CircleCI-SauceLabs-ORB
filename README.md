@@ -14,7 +14,7 @@ An example config running selenium tests for multiple browsers in parallel with 
 ```yaml
 version: 2.1
 orbs:
-  saucelabs: saucelabs/connects@volatile
+  saucelabs: saucelabs/connects@x.y.z
 workflows:
   browser_tests:
     jobs:
