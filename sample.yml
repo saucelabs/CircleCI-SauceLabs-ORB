@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   # TODO: change to saucelabs: saucelabs/connects@volatile once transitioned
-  saucelabs: sandbox/saucelabs@volatile
+  saucelabs: sandbox/saucelabs@x.y.z
 workflows:
   basic_workflow:
     jobs:
